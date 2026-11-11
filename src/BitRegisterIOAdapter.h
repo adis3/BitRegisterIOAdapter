@@ -81,7 +81,6 @@ private:
     const char* name;
   };
   CallbackRegistration callbacks[MAX_CALLBACKS];
-  //  OnStateChangeCallback callbacks[MAX_CALLBACKS];
   uint8_t callbackCount = 0;
 
 

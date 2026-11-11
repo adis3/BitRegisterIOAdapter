@@ -79,7 +79,13 @@ void BitRegisterIOAdapter::Set(bool state) {
     currentState = state;
     // Write to hardware if not virtual
     if (!IsVirtual()) {
-      ::digitalWrite(pin, state ? HIGH : LOW);
+      if (mode == OUTPUT_MODE) {
+        ::digitalWrite(pin, state ? HIGH : LOW);
+      } else {
+        if (logger != nullptr) {
+          LogBit(logger, LogLevel::Error, pin, name, "Attempted to set state on non-output hardware pin");
+        }
+      }
     }
     if (logger != nullptr) {
       LogBit(logger, LogLevel::Debug, pin, name,
@@ -150,10 +156,10 @@ bool BitRegisterIOAdapter::OnStateChange(OnStateChangeCallback callback, const c
     return false;
   }
   callbacks[callbackCount] = {callback, callbackName};
-  if (logger != nullptr) {
-    LogCallbackAction(logger, pin, name, "added", callbacks[callbackCount].name);
-  }
   callbackCount++;
+  if (logger != nullptr) {
+    LogCallbackAction(logger, pin, name, "added", callbackName);
+  }
   return true;
 }
 

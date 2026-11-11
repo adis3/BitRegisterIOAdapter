@@ -171,29 +171,12 @@ BitRegisterIOAdapter pumpMock(false);  // Virtual pump
 // Test code sees same interface
 ```
 
-## Memory Usage
-
-- **Per bit:** ~30 bytes base + 4 bytes per callback
-- **Max callbacks:** 4 (configurable via MAX_CALLBACKS)
-- **Virtual vs Physical:** Same memory footprint
-
-### Typical Usage
-
-```cpp
-// Mega 2560: 8KB SRAM
-BitRegisterIOAdapter led(13, BitRegisterIOAdapter::OUTPUT_MODE);          // ~30 bytes
-BitRegisterIOAdapter button(2, BitRegisterIOAdapter::INPUT_PULLUP_MODE);  // ~30 bytes
-BitRegisterIOAdapter alarm(7, BitRegisterIOAdapter::INPUT_MODE);          // ~30 bytes
-// Total: ~90 bytes + callbacks
-```
-
 ## Compatibility
 
 - **Arduino Mega** ✓
 - **Arduino Uno** ✓
 - **ESP8266** ✓
 - **ESP32** ✓
-- **ARM boards (SAM, SAMD)** ✓
 
 ## License
 
