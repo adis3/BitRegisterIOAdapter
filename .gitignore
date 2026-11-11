@@ -15,6 +15,7 @@ dist/
 *~
 .DS_Store
 Thumbs.db
+.vs/
 
 # Build artifacts
 *.out
