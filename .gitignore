@@ -1,0 +1,26 @@
+# Arduino IDE
+*.o
+*.a
+*.so
+build/
+dist/
+*.elf
+*.hex
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.out
+*.lst
+*.sym
+
+# Testing
+test_output/
+*.log
