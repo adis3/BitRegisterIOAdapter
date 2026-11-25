@@ -1,0 +1,1 @@
+Host tests: cmake -S tests -B build/tests, cmake --build build/tests --config Debug, then ctest --test-dir build/tests -C Debug --output-on-failure. Requires the sibling ILogger library. Tests cover default/active-low initialization, pin preloading, logical Set/Get/Toggle/callbacks, repeated Set, unchanged inputs, and virtual bits.

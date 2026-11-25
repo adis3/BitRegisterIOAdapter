@@ -7,8 +7,11 @@
 
 #include <BitRegisterIOAdapter.h>
 
+// Set true for an active-LOW LED or relay. Set/Get/callbacks stay logical.
+constexpr bool kInvertOutput = false;
+
 // Create physical digital bits
-BitRegisterIOAdapter ledPin(13, BitRegisterIOAdapter::OUTPUT_MODE, nullptr, "ledPin");
+BitRegisterIOAdapter ledPin(13, BitRegisterIOAdapter::OUTPUT_MODE, nullptr, "ledPin", kInvertOutput);
 BitRegisterIOAdapter buttonPin(2, BitRegisterIOAdapter::INPUT_PULLUP_MODE, nullptr, "buttonPin");
 
 // Callback function for state changes
