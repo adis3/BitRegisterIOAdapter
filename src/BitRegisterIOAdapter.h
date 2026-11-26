@@ -32,10 +32,12 @@ public:
    * Constructor for physical pin
    * @param pin - GPIO pin number (0-53 for Mega, etc.)
    * @param mode - INPUT_MODE, OUTPUT_MODE, INPUT_PULLUP_MODE, or VIRTUAL_MODE
+   * @param invert_output - Active-low physical output; ignored for inputs/virtual bits.
+   * Outputs start logical OFF (HIGH when inverted), preloaded before pinMode().
    * @param logger - Optional logger for state change events and initialization messages
    * @param name - Optional log source name; must outlive this adapter (use a string literal)
    */
-  BitRegisterIOAdapter(uint8_t pin, Mode mode, ILogger* logger = nullptr, const char* name = nullptr);
+  BitRegisterIOAdapter(uint8_t pin, Mode mode, ILogger* logger = nullptr, const char* name = nullptr, bool invert_output = false);
 
   /**
    * Constructor for virtual bit (no hardware)
@@ -49,6 +51,8 @@ public:
   // Reject single-integer construction
   BitRegisterIOAdapter(int) = delete;
 
+  // Set/Get/Toggle and callbacks use logical values. Physical output polarity
+  // is selected at construction; inputs and virtual bits are never inverted.
   // Core state management
   void Set(bool state);
   bool Get();
@@ -73,6 +77,7 @@ private:
   uint8_t pin;
   Mode mode;
   bool currentState;
+  const bool invert_output;  // Electrical inversion, physical OUTPUT_MODE only.
 
   // Event callbacks (max 4 subscribers by default)
   static const uint8_t MAX_CALLBACKS = 4;

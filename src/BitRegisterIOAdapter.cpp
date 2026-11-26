@@ -24,21 +24,24 @@ namespace {
 }
 
 // Constructor for physical pin
-BitRegisterIOAdapter::BitRegisterIOAdapter(uint8_t pin, BitRegisterIOAdapter::Mode mode, ILogger* logger, const char* name) 
+BitRegisterIOAdapter::BitRegisterIOAdapter(uint8_t pin, BitRegisterIOAdapter::Mode mode, ILogger* logger, const char* name, bool invert_output)
   : pin(pin), 
     mode(mode), 
     currentState(false),
+    invert_output(invert_output),
     callbackCount(0),
     logger(logger),
     name(name) {
   // Initialize hardware pin if not virtual
   if (!IsVirtual()) {
+    // Preload logical OFF before enabling the output driver.
+    if (mode == OUTPUT_MODE) {
+      ::digitalWrite(pin, (currentState != invert_output) ? HIGH : LOW);
+    }
     ::pinMode(pin, mode);
     // Read initial state from pin
     if (mode == INPUT_MODE || mode == INPUT_PULLUP_MODE) {
       currentState = ::digitalRead(pin) == HIGH;
-    } else if (mode == OUTPUT_MODE) {
-      ::digitalWrite(pin, currentState ? HIGH : LOW);
     }
   }
   // Initialize callbacks array
@@ -58,6 +61,7 @@ BitRegisterIOAdapter::BitRegisterIOAdapter(bool initialState, ILogger* logger, c
   : pin(VIRTUAL_PIN),
     mode(VIRTUAL_MODE), 
     currentState(initialState),
+    invert_output(false),
     callbackCount(0),
     logger(logger),
     name(name) {
@@ -80,7 +84,7 @@ void BitRegisterIOAdapter::Set(bool state) {
     // Write to hardware if not virtual
     if (!IsVirtual()) {
       if (mode == OUTPUT_MODE) {
-        ::digitalWrite(pin, state ? HIGH : LOW);
+        ::digitalWrite(pin, (state != invert_output) ? HIGH : LOW);
       } else {
         if (logger != nullptr) {
           LogBit(logger, LogLevel::Error, pin, name, "Attempted to set state on non-output hardware pin");

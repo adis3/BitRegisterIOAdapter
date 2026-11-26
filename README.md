@@ -192,3 +192,18 @@ Contributions welcome! Please:
 ## Support
 
 Issues or questions? Open an issue on GitHub.
+
+## Physical output polarity
+
+Pass invert_output as the final physical constructor argument (default false):
+
+~~~cpp
+BitRegisterIOAdapter relay(5, BitRegisterIOAdapter::OUTPUT_MODE, nullptr, "relay", true);
+relay.Set(true);  // ON: drives LOW
+relay.Set(false); // OFF: drives HIGH
+~~~
+
+Set(), Get(), Toggle(), logs, and callbacks use logical values. Outputs start
+logical OFF; the constructor preloads the inactive level before pinMode().
+Inversion applies only to physical OUTPUT_MODE pins. Inputs and virtual bits
+retain their existing behavior. Polarity is fixed for the adapter lifetime.
